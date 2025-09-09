@@ -49,9 +49,9 @@ class Circuit:
         self.state  = new_state
         if not state_changed:
             self.fixed = True
-            print("The system has reached a fixed point.")
+            #print("The system has reached a fixed point.")
 
-    def print_state(self):
+    def print_state(self, circuit_name="circuit"):
         """Print the current state of the circuit in a nice table format"""
         print("Current state of the circuit:")
         print("Node | State")
@@ -60,7 +60,7 @@ class Circuit:
             print(f"{neuron:4} | {val:5}")
         print(f"y  | {self.y()}")
 
-    def search_fixed_point(self, max_steps=100):
+    def search_fixed_point(self, max_steps=100, circuit_name= "circuit", verbose=False):
         """Run the circuit until it reaches a fixed point or max_steps is reached
         Args:
             max_steps (int): Maximum number of steps to run the circuit"""
@@ -70,17 +70,20 @@ class Circuit:
             step_count += 1
         if self.fixed:
             print(f"Fixed point reached in {step_count} steps.")
-            self.print_state()
+            if verbose:
+                self.print_state()
         else:
             print(f"Max steps reached ({max_steps}) without finding a fixed point.")
+        return self.state
 
     def y(self):
         """return the sign of uPN - 3*mPN"""
         return np.sign(self.state[2] - 3*self.state[3])
     
-    def inactive_csd(self):
+    def inactive_csd(self): #not sure what "inactiveCSD" means in the assignment
         """Set the CSD neuron to inactive (0)"""
-        self.state[4] = 0
+        self.matrix[4] = np.zeros(5)
+        print(self.matrix)
         self.fixed = False
 
     def inactivep_LN14(self):
